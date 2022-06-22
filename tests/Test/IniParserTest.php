@@ -14,10 +14,10 @@ class IniParserTest extends PHPUnit_Framework_TestCase
      */
     public function testIniParserVsParseIniString()
     {
-        $parseIniString = parse_ini_file(BASE_DIR . '/tests/fixtures/fixture00.ini', true);
+        $parseIniString = parse_ini_file(BASE_DIR.'/tests/fixtures/fixture00.ini', true);
 
         $configObj = $this->getConfig('fixture00.ini');
-        $config    = $this->phpUnitDoesntUnderstandArrayObject($configObj);
+        $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
 
         $this->assertSame($config, $parseIniString);
     }
@@ -38,14 +38,14 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     public function testParser()
     {
         $configObj = $this->getConfig('fixture01.ini');
-        $config    = $this->phpUnitDoesntUnderstandArrayObject($configObj);
+        $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
 
-        $expected = array(
-            'production' => array(
+        $expected = [
+            'production' => [
                 'hello' => 'world',
-                'super' => array('funny' => 'config')
-            )
-        );
+                'super' => ['funny' => 'config'],
+            ],
+        ];
 
         $this->assertSame($expected, $config);
     }
@@ -58,16 +58,16 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     public function testInheritance()
     {
         $configObj = $this->getConfig('fixture02.ini');
-        $config    = $this->phpUnitDoesntUnderstandArrayObject($configObj);
+        $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
 
-        $expected = array(
-            'prod' => array(
-                'hello' => 'world'
-            ),
-            'dev' => array(
-                'hello' => 'world'
-            )
-        );
+        $expected = [
+            'prod' => [
+                'hello' => 'world',
+            ],
+            'dev' => [
+                'hello' => 'world',
+            ],
+        ];
 
         $this->assertSame($expected, $config);
     }
@@ -104,7 +104,7 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that array literals are parsed correctly
+     * Test that array literals are parsed correctly.
      *
      * @return void
      */
@@ -113,14 +113,14 @@ class IniParserTest extends PHPUnit_Framework_TestCase
         $configObj = $this->getConfig('fixture04.ini');
 
         $this->assertInternalType('array', $configObj['array1']);
-        $this->assertEquals(array('a','b','c'), $configObj['array1']);
+        $this->assertEquals(['a', 'b', 'c'], $configObj['array1']);
 
         $this->assertInternalType('array', $configObj['sect1']['array2']);
-        $this->assertEquals(array('d','e','f'), $configObj['sect1']['array2']);
+        $this->assertEquals(['d', 'e', 'f'], $configObj['sect1']['array2']);
     }
 
     /**
-     * Test that inheriting from a section defined later works
+     * Test that inheriting from a section defined later works.
      */
     public function testForwardReferenceInheritance()
     {
@@ -131,7 +131,7 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that inheriting from an undefined section gives a nice error
+     * Test that inheriting from an undefined section gives a nice error.
      *
      * @expectedException UnexpectedValueException
      */
@@ -141,7 +141,7 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test section inheritance from the top level
+     * Test section inheritance from the top level.
      *
      * @return void
      */
@@ -154,13 +154,13 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test appending values during inheritance
+     * Test appending values during inheritance.
      */
     public function testAppendValues()
     {
         $configObj = $this->getConfig('fixture04.ini');
 
-        $this->assertEquals(array('a','b','c','x','y','z'), $configObj['sect3']['array1']);
+        $this->assertEquals(['a', 'b', 'c', 'x', 'y', 'z'], $configObj['sect3']['array1']);
         $this->assertEquals('barbaz', $configObj['sect3']['foo']);
     }
 
@@ -172,41 +172,41 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     public function testComplex()
     {
         $configObj = $this->getConfig('fixture03.ini');
-        $config    = $this->phpUnitDoesntUnderstandArrayObject($configObj);
+        $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
 
-        $expected = array(
+        $expected = [
             'environment' => 'testing',
-            'testing' => array(
-                'debug' => true,
-                'database' => array(
+            'testing'     => [
+                'debug'    => true,
+                'database' => [
                     'connection' => 'mysql:host=127.0.0.1',
-                    'name' => 'test',
-                    'username' => '',
-                    'password' => ''
-                ),
-                'secrets' => array(1, 2, 3)
-            ),
-            'staging' => array(
-                'debug' => true,
-                'database' => array(
+                    'name'       => 'test',
+                    'username'   => '',
+                    'password'   => '',
+                ],
+                'secrets' => [1, 2, 3],
+            ],
+            'staging' => [
+                'debug'    => true,
+                'database' => [
                     'connection' => 'mysql:host=127.0.0.1',
-                    'name' => 'stage',
-                    'username' => 'staging',
-                    'password' => 12345
-                ),
-                'secrets' => array(1, 2, 3)
-            ),
-            'production' => array(
-                'debug' => false,
-                'database' => array(
+                    'name'       => 'stage',
+                    'username'   => 'staging',
+                    'password'   => 12345,
+                ],
+                'secrets' => [1, 2, 3],
+            ],
+            'production' => [
+                'debug'    => false,
+                'database' => [
                     'connection' => 'mysql:host=127.0.0.1',
-                    'name' => 'production',
-                    'username' => 'root',
-                    'password' => 12345
-                ),
-                'secrets' => array(1, 2, 3)
-            )
-        );
+                    'name'       => 'production',
+                    'username'   => 'root',
+                    'password'   => 12345,
+                ],
+                'secrets' => [1, 2, 3],
+            ],
+        ];
 
         $this->assertEquals($expected, $config);
     }
@@ -214,29 +214,31 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     /**
      * Tests that appending to a potentially non-existent array works as expected
      * Spawned by https://github.com/austinhyde/IniParser/issues/6
-     * and https://github.com/austinhyde/IniParser/pull/7
-     * 
+     * and https://github.com/austinhyde/IniParser/pull/7.
+     *
      * @return void
      */
     public function testArrayAppend()
     {
         $configObj = $this->getConfig('fixture07.ini');
-        $config    = $this->phpUnitDoesntUnderstandArrayObject($configObj);
-        $expected = array(1, 2, 'c');
+        $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
+        $expected = [1, 2, 'c'];
 
         $this->assertArrayHasKey('a', $config);
         $this->assertEquals($expected, $config['a']);
     }
 
     /**
-     * Tests that section names are allowed to be numeric
+     * Tests that section names are allowed to be numeric.
+     *
      * @return void
      */
-    public function testNumericSections() {
+    public function testNumericSections()
+    {
         $configObj = $this->getConfig('fixture08.ini');
-        $config    = $this->phpUnitDoesntUnderstandArrayObject($configObj);
+        $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
 
-        $this->assertEquals(array('a', 0, 1), array_keys($config));
+        $this->assertEquals(['a', 0, 1], array_keys($config));
         $this->assertEquals(1, $config['a']);
 
         $this->assertArrayHasKey('b', $config[0]);
@@ -247,100 +249,109 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that ArrayObjects are only used when the flag is set
+     * Tests that ArrayObjects are only used when the flag is set.
+     *
      * @return void
      */
-    public function testUseArrayObject() {
-        $parser = new IniParser(BASE_DIR . '/tests/fixtures/fixture01.ini');
+    public function testUseArrayObject()
+    {
+        $parser = new IniParser(BASE_DIR.'/tests/fixtures/fixture01.ini');
         $configObj = $parser->parse();
 
         $this->assertInstanceOf('ArrayObject', $configObj);
 
-        $parser->use_array_object = FALSE;
+        $parser->use_array_object = false;
         $configArr = $parser->parse();
 
         $this->assertInternalType('array', $configArr);
     }
 
     /**
-     * Tests that arrays with 0 as key work as expected
+     * Tests that arrays with 0 as key work as expected.
      *
      * @return void
      */
-    public function testArrayWithZeroAsKey() {
+    public function testArrayWithZeroAsKey()
+    {
         $configObj = $this->getConfig('fixture09.ini');
-        $config    = $this->phpUnitDoesntUnderstandArrayObject($configObj);
+        $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
 
         $this->assertObjectHasAttribute('helloworld', $configObj);
         $this->assertObjectHasAttribute('hello', $configObj->helloworld);
 
-        $this->assertEquals((array)$configObj->helloworld->hello, array(1 => 'world', 0 => 'hello'));
+        $this->assertEquals((array) $configObj->helloworld->hello, [1 => 'world', 0 => 'hello']);
     }
 
     /**
-     * Tests that json is parsed as expected
+     * Tests that json is parsed as expected.
      *
      * @return void
      */
-    public function testJson() {
-        $configObj = $this->getConfig('fixture10.ini',
-            array('array_literals_behavior' => IniParser::PARSE_JSON));
+    public function testJson()
+    {
+        $configObj = $this->getConfig(
+            'fixture10.ini',
+            ['array_literals_behavior' => IniParser::PARSE_JSON]
+        );
         $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
 
         $this->assertObjectHasAttribute('people', $configObj);
 
-        $array = array(
-            'boss' => array(
+        $array = [
+            'boss' => [
                 'name' => 'John',
-                'age' => 42,
-            ),
-            'staff' => array(
-                array(
+                'age'  => 42,
+            ],
+            'staff' => [
+                [
                     'name' => 'Mark',
-                    'age' => 35,
-                ),
-                array(
+                    'age'  => 35,
+                ],
+                [
                     'name' => 'Bill',
-                    'age' => 44,
-                ),
-            ),
-        );
+                    'age'  => 44,
+                ],
+            ],
+        ];
 
         $this->assertEquals($array, $config['people']);
     }
 
-    public function testNoPropertyNesting() {
-        $configObj = $this->getConfig('fixture03.ini',
-            array('property_nesting' => false));
+    public function testNoPropertyNesting()
+    {
+        $configObj = $this->getConfig(
+            'fixture03.ini',
+            ['property_nesting' => false]
+        );
         $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
 
-        $expected = array(
+        $expected = [
             'environment' => 'testing',
-            'testing' => array(
-                'debug' => true,
+            'testing'     => [
+                'debug'               => true,
                 'database.connection' => 'mysql:host=127.0.0.1',
-                'database.name' => 'test',
-                'database.username' => '',
-                'database.password' => '',
-                'secrets' => array(1, 2, 3)
-            ),
-            'staging' => array(
-                'debug' => true,
+                'database.name'       => 'test',
+                'database.username'   => '',
+                'database.password'   => '',
+                'secrets'             => [1, 2, 3],
+            ],
+            'staging' => [
+                'debug'               => true,
                 'database.connection' => 'mysql:host=127.0.0.1',
-                'database.name' => 'stage',
-                'database.username' => 'staging',
-                'database.password' => 12345,
-                'secrets' => array(1, 2, 3)
-            ),
-            'production' => array(
-                'debug' => false,
+                'database.name'       => 'stage',
+                'database.username'   => 'staging',
+                'database.password'   => 12345,
+                'secrets'             => [1, 2, 3],
+            ],
+            'production' => [
+                'debug'               => false,
                 'database.connection' => 'mysql:host=127.0.0.1',
-                'database.name' => 'production',
-                'database.username' => 'root',
-                'database.password' => 12345,
-                'secrets' => array(1, 2, 3)
-            )
-        );
+                'database.name'       => 'production',
+                'database.username'   => 'root',
+                'database.password'   => 12345,
+                'secrets'             => [1, 2, 3],
+            ],
+        ];
 
         $this->assertEquals($expected, $config);
     }
@@ -354,8 +365,8 @@ class IniParserTest extends PHPUnit_Framework_TestCase
     public function testNestedArrayAppend()
     {
         $configObj = $this->getConfig('fixture11.ini');
-        $config    = $this->phpUnitDoesntUnderstandArrayObject($configObj);
-        $expected = array(1, 2, 'c');
+        $config = $this->phpUnitDoesntUnderstandArrayObject($configObj);
+        $expected = [1, 2, 'c'];
 
         $this->assertArrayHasKey('nesting', $config);
         $this->assertArrayHasKey('a', $config['nesting']);
@@ -369,13 +380,14 @@ class IniParserTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function getConfig($file, $options = array())
+    protected function getConfig($file, $options = [])
     {
-        $parser = new IniParser(BASE_DIR . '/tests/fixtures/' . $file);
+        $parser = new IniParser(BASE_DIR.'/tests/fixtures/'.$file);
         foreach ($options as $key => $value) {
             $parser->$key = $value;
         }
         $config = $parser->parse();
+
         return $config;
     }
 
@@ -394,6 +406,7 @@ class IniParserTest extends PHPUnit_Framework_TestCase
                 $arr[$key] = $this->phpUnitDoesntUnderstandArrayObject($value);
             }
         }
+
         return $arr;
     }
 }
